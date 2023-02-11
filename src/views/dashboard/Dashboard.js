@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Dashboard.css'
 import axios from 'axios'
-import Modal from 'react-modal'
 import { CModal } from '@coreui/react'
 
 const Dashboard = () => {
