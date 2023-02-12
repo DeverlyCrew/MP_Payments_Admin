@@ -1,12 +1,38 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
+import axios from 'axios'
 
 // routes config
 import routes from '../routes'
 
 const AppContent = () => {
-  if (!localStorage.getItem('token')) {
+  const [token, setToken] = useState(localStorage.getItem('token') || false)
+  useEffect(() => {
+    if (!token || token === 'undefined') {
+      return
+    } else {
+      axios
+        .get('http://localhost:8002/is-token-valid', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          if (!res.data) {
+            localStorage.clear()
+            setToken(false)
+            window.location.reload()
+          }
+          console.log(res.data)
+          localStorage.setItem('token', res.data.user.token)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  }, [])
+  if (!token) {
     return <Navigate to="/login" />
   }
   return (
