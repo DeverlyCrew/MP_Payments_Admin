@@ -92,17 +92,22 @@ const Dashboard = () => {
                 <th scope="col">Prezime</th>
                 <th scope="col">Email</th>
                 <th scope="col">Kurs</th>
-                <th scope="col">Datum uplate</th>
+                <th scope="col">Datum zadnje uplate</th>
               </tr>
             </thead>
             <tbody>
               {data?.map((polaznik) => (
-                <tr key={polaznik._id}>
+                <tr
+                  key={polaznik._id}
+                  onClick={() => {
+                    window.location.href = `/#/user/${polaznik._id}`
+                  }}
+                >
                   <td>{polaznik.firstName}</td>
                   <td>{polaznik.lastName}</td>
                   <td>{polaznik.email}</td>
                   <td>{polaznik.courses.name}</td>
-                  <td>{polaznik.latestPayment}</td>
+                  <td>{polaznik.latestPayment?.split('T')[0]}</td>
                 </tr>
               ))}
             </tbody>

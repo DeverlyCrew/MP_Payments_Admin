@@ -28,7 +28,9 @@ const AppContent = () => {
           localStorage.setItem('token', res.data.user.token)
         })
         .catch((err) => {
-          console.log(err)
+          localStorage.clear()
+          setToken(false)
+          window.location.reload()
         })
     }
   }, [])
