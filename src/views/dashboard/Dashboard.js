@@ -24,7 +24,6 @@ const Dashboard = () => {
       .then((res) => {
         setCourses(res.data.data)
         setModalIsOpen(true)
-        console.log(modalIsOpen)
       })
       .catch((err) => {
         console.log(err)
@@ -51,7 +50,6 @@ const Dashboard = () => {
         },
       )
       .then((res) => {
-        console.log(res.data)
         setModalIsOpen(false)
         window.location.reload()
       })
@@ -69,10 +67,13 @@ const Dashboard = () => {
       })
       .then((res) => {
         setData(res.data.data)
-        console.log(res.data)
       })
       .catch((err) => {
         console.log(err)
+        if (err.response.status === 401) {
+          localStorage.clear()
+          window.location.href = '/#/login'
+        }
       })
   }, [])
   return (

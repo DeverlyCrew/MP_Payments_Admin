@@ -16,7 +16,6 @@ const User = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   useEffect(() => {
-    console.log(fromDate, toDate)
     axios
       .post(
         `http://localhost:8002/get-user`,
@@ -31,10 +30,13 @@ const User = () => {
       )
       .then((res) => {
         setUser(res.data)
-        console.log(user)
       })
       .catch((err) => {
         console.log(err)
+        if (err.response.status === 401) {
+          localStorage.clear()
+          window.location.href = '/login'
+        }
       })
   }, [])
 
@@ -55,7 +57,6 @@ const User = () => {
         },
       )
       .then((res) => {
-        console.log(res.data)
         setModalIsOpen(false)
         window.location.reload()
       })
@@ -77,7 +78,6 @@ const User = () => {
               className="btn btn-info"
               onClick={() => {
                 setModalIsOpen(true)
-                console.log(modalIsOpen)
               }}
             >
               Dodaj plaćanje

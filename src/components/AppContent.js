@@ -24,7 +24,6 @@ const AppContent = () => {
             setToken(false)
             window.location.reload()
           }
-          console.log(res.data)
           localStorage.setItem('token', res.data.user.token)
         })
         .catch((err) => {

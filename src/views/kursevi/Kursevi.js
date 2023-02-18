@@ -23,7 +23,6 @@ const Kursevi = () => {
         },
       )
       .then((res) => {
-        console.log(res.data)
         setModalIsOpen(false)
         window.location.reload()
       })
@@ -41,10 +40,13 @@ const Kursevi = () => {
       })
       .then((res) => {
         setData(res.data.data)
-        console.log(res.data.data)
       })
       .catch((err) => {
         console.log(err)
+        if (err.response.status === 401) {
+          localStorage.clear()
+          window.location.href = '/login'
+        }
       })
   }, [])
   return (
