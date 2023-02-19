@@ -5,6 +5,7 @@ import { CModal } from '@coreui/react'
 
 const Dashboard = () => {
   const [data, setData] = useState([])
+  const [showData, setShowData] = useState(data)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -58,6 +59,32 @@ const Dashboard = () => {
       })
   }
 
+  const addData = (newData) => {
+    const sortedData = [...newData]
+    sortedData.sort((a, b) => {
+      return new Date(b.latestPayment).getTime() - new Date(a.latestPayment).getTime()
+    })
+    sortedData.reverse()
+    setData(sortedData)
+    setShowData(sortedData)
+  }
+
+  const handleSearch = (e) => {
+    if (e.target.value === '') {
+      setShowData(data)
+      return
+    }
+    const filteredData = data.filter((polaznik) => {
+      return (
+        polaznik.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        polaznik.lastName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        polaznik.courses.name.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+    })
+    setShowData(filteredData)
+    console.log(showData)
+  }
+
   useEffect(() => {
     axios
       .get('http://localhost:8002/get-users', {
@@ -66,7 +93,7 @@ const Dashboard = () => {
         },
       })
       .then((res) => {
-        setData(res.data.data)
+        addData(res.data.data)
       })
       .catch((err) => {
         console.log(err)
@@ -81,6 +108,12 @@ const Dashboard = () => {
       <div className="dashbard_container">
         <div className="dashboard_header">
           <h1>Polaznici</h1>
+          <input
+            type="text"
+            className="form-control search_input"
+            placeholder="Pretraži polaznike"
+            onChange={handleSearch}
+          />
           <button className="btn btn-primary" onClick={handleOpenModal}>
             Dodaj polaznika
           </button>
@@ -94,10 +127,11 @@ const Dashboard = () => {
                 <th scope="col">Email</th>
                 <th scope="col">Kurs</th>
                 <th scope="col">Datum zadnje uplate</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
             <tbody>
-              {data?.map((polaznik) => (
+              {showData?.map((polaznik) => (
                 <tr
                   key={polaznik._id}
                   onClick={() => {
@@ -109,6 +143,7 @@ const Dashboard = () => {
                   <td>{polaznik.email}</td>
                   <td>{polaznik.courses.name}</td>
                   <td>{polaznik.latestPayment?.split('T')[0]}</td>
+                  <td>{polaznik.status}</td>
                 </tr>
               ))}
             </tbody>

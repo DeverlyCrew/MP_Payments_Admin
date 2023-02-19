@@ -43,3 +43,9 @@
     flex-direction: column;
     margin: 10px 0;
 }
+.search_input {
+    width: 30%;
+    border: 1px solid #eaeaea;
+    border-radius: 50px;
+    padding: 0 10px;
+}
