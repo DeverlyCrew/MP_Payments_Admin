@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './Dashboard.css'
 import axios from 'axios'
 import { CModal } from '@coreui/react'
+import { MakeRow } from './components/makeRow'
+import handleOpenModal from './components/handleOpenModal'
 
 const Dashboard = () => {
   const [data, setData] = useState([])
@@ -14,22 +16,6 @@ const Dashboard = () => {
   const [city, setCity] = useState('')
   const [phoneNum, setPhoneNum] = useState('')
   const [courses, setCourses] = useState([])
-
-  const handleOpenModal = () => {
-    axios
-      .get('http://localhost:8002/get-courses', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setCourses(res.data.data)
-        setModalIsOpen(true)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -114,7 +100,10 @@ const Dashboard = () => {
             placeholder="Pretraži polaznike"
             onChange={handleSearch}
           />
-          <button className="btn btn-primary" onClick={handleOpenModal}>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleOpenModal(setCourses, setModalIsOpen)}
+          >
             Dodaj polaznika
           </button>
         </div>
@@ -128,25 +117,10 @@ const Dashboard = () => {
                 <th scope="col">Kurs</th>
                 <th scope="col">Datum zadnje uplate</th>
                 <th scope="col">Status</th>
+                <th scope="col">Akcije</th>
               </tr>
             </thead>
-            <tbody>
-              {showData?.map((polaznik) => (
-                <tr
-                  key={polaznik._id}
-                  onClick={() => {
-                    window.location.href = `/#/user/${polaznik._id}`
-                  }}
-                >
-                  <td>{polaznik.firstName}</td>
-                  <td>{polaznik.lastName}</td>
-                  <td>{polaznik.email}</td>
-                  <td>{polaznik.courses.name}</td>
-                  <td>{polaznik.latestPayment?.split('T')[0]}</td>
-                  <td>{polaznik.status}</td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{showData?.map(MakeRow)}</tbody>
           </table>
         </div>
         <CModal visible={modalIsOpen} size="lg">

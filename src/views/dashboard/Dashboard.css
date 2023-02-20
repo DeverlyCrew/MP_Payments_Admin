@@ -49,3 +49,12 @@
     border-radius: 50px;
     padding: 0 10px;
 }
+.send_email_btn {
+    z-index: 999;
+    height:30px;
+    padding: 0 10px;
+}
+.table_row_link {
+    cursor: pointer;
+    z-index: 0;
+}
