@@ -13,11 +13,7 @@ const AppContent = () => {
       return
     } else {
       axios
-        .get('http://localhost:8002/is-token-valid', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
+        .get(`${process.env.REACT_APP_URL}/is-token-valid`)
         .then((res) => {
           if (!res.data) {
             localStorage.clear()

@@ -20,28 +20,26 @@ const Dashboard = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     axios
-      .post(
-        'http://localhost:8002/register-user',
-        {
-          firstName,
-          lastName,
-          email,
-          course_id: course,
-          city,
-          phoneNumber: phoneNum,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      .post(`${process.env.REACT_APP_URL}/register-user`, {
+        firstName,
+        lastName,
+        email,
+        course_id: course,
+        city,
+        phoneNumber: phoneNum,
+      })
       .then((res) => {
         setModalIsOpen(false)
         window.location.reload()
       })
       .catch((err) => {
         console.log(err)
+        if (err.response.status === 401) {
+          localStorage.clear()
+          window.location.href = '/#/login'
+        } else if (err.response.status === 409) {
+          alert('Polaznik sa ovim emailom već postoji')
+        }
       })
   }
 
@@ -68,16 +66,11 @@ const Dashboard = () => {
       )
     })
     setShowData(filteredData)
-    console.log(showData)
   }
 
   useEffect(() => {
     axios
-      .get('http://localhost:8002/get-users', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      .get(`${process.env.REACT_APP_URL}/get-users`)
       .then((res) => {
         addData(res.data.data)
       })

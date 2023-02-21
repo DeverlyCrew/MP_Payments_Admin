@@ -14,7 +14,7 @@ const Admins = () => {
   const addAdmin = (e) => {
     e.preventDefault()
     axios
-      .post('http://localhost:8002/add-admin', {
+      .post(`${process.env.REACT_APP_URL}/add-admin`, {
         firstName,
         lastName,
         email,
@@ -29,7 +29,7 @@ const Admins = () => {
   }
   const deleteAdmin = (id) => {
     axios
-      .delete(`http://localhost:8002/delete-admin/${id}`)
+      .delete(`${process.env.REACT_APP_URL}/delete-admin/${id}`)
       .then((response) => {
         window.location.reload()
       })
@@ -40,11 +40,7 @@ const Admins = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8002/get-admins', {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      .get(`${process.env.REACT_APP_URL}/get-admins`)
       .then((response) => {
         setAdmins(response.data)
       })

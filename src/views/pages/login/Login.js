@@ -26,7 +26,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     axios
-      .post('http://localhost:8002/admin-login', {
+      .post(`${process.env.REACT_APP_URL}/admin-login`, {
         email,
         password,
       })

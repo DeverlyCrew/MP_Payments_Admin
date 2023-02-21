@@ -3,9 +3,9 @@ import axios from 'axios'
 export const sendEmail = (e, name, email) => {
   e.preventDefault()
   axios
-    .post('http://localhost:8002/send-email', {
+    .post(`${process.env.REACT_APP_URL}/send-email`, {
       subject: 'Upozorenje o isteku uplate',
-      text: `želimo da Vas podsjetimo da je Vaša uplata za ${name} istekla`,
+      text: `želimo da Vas podsjetimo da je Vaša uplata za "${name}"istekla`,
       email,
     })
     .then((res) => {
