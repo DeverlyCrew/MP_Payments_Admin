@@ -106,7 +106,7 @@ const User = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     axios
-      .post(`http://localhost:8002/add-payment`, {
+      .post(`${process.env.REACT_APP_URL}/add-payment`, {
         user_id: id,
         amount,
         period: [fromDate, toDate],

@@ -3,7 +3,7 @@ import addData from './addData'
 
 const getUsers = (setData, setShowData) => {
   axios
-    .get(`http://localhost:8002/get-users`)
+    .get(`${process.env.REACT_APP_URL}/get-users`)
     .then((res) => {
       addData(res.data.data, setData, setShowData)
     })
