@@ -1,5 +1,4 @@
 import React from 'react'
-import { sendEmail } from './sendEmail'
 
 export const MakeRow = (polaznik) => (
   <tr key={polaznik._id} className="table_row_link">
@@ -45,19 +44,6 @@ export const MakeRow = (polaznik) => (
     >
       {polaznik.status}
     </td>
-    {polaznik.status === 'Nije plaćeno' ? (
-      <td>
-        <button
-          className="btn btn-danger send_email_btn"
-          onClick={(e) =>
-            sendEmail(e, `${polaznik.firstName} ${polaznik.lastName}`, polaznik.email)
-          }
-        >
-          Pošalji email
-        </button>
-      </td>
-    ) : (
-      <td></td>
-    )}
+    {polaznik.isEmailSent ? <td>Email poslat</td> : <td>Email nije poslat</td>}
   </tr>
 )
