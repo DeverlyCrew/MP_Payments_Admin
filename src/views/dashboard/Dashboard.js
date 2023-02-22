@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './Dashboard.css'
-import axios from 'axios'
 import { CModal } from '@coreui/react'
 import { MakeRow } from './components/makeRow'
 import handleOpenModal from './components/handleOpenModal'
+import getUsers from './components/getUsers'
+import handleSubmit from './components/handleSubmit'
 
 const Dashboard = () => {
   const [data, setData] = useState([])
@@ -16,42 +17,6 @@ const Dashboard = () => {
   const [city, setCity] = useState('')
   const [phoneNum, setPhoneNum] = useState('')
   const [courses, setCourses] = useState([])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    axios
-      .post(`${process.env.REACT_APP_URL}/register-user`, {
-        firstName,
-        lastName,
-        email,
-        course_id: course,
-        city,
-        phoneNumber: phoneNum,
-      })
-      .then((res) => {
-        setModalIsOpen(false)
-        window.location.reload()
-      })
-      .catch((err) => {
-        console.log(err)
-        if (err.response.status === 401) {
-          localStorage.clear()
-          window.location.href = '/#/login'
-        } else if (err.response.status === 409) {
-          alert('Polaznik sa ovim emailom već postoji')
-        }
-      })
-  }
-
-  const addData = (newData) => {
-    const sortedData = [...newData]
-    sortedData.sort((a, b) => {
-      return new Date(b.latestPayment).getTime() - new Date(a.latestPayment).getTime()
-    })
-    sortedData.reverse()
-    setData(sortedData)
-    setShowData(sortedData)
-  }
 
   const handleSearch = (e) => {
     if (e.target.value === '') {
@@ -69,18 +34,7 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_URL}/get-users`)
-      .then((res) => {
-        addData(res.data.data)
-      })
-      .catch((err) => {
-        console.log(err)
-        if (err.response.status === 401) {
-          localStorage.clear()
-          window.location.href = '/#/login'
-        }
-      })
+    getUsers(setData, setShowData)
   }, [])
   return (
     <>
@@ -110,7 +64,7 @@ const Dashboard = () => {
                 <th scope="col">Kurs</th>
                 <th scope="col">Datum zadnje uplate</th>
                 <th scope="col">Status</th>
-                <th scope="col">Akcije</th>
+                <th scope="col">Email status</th>
               </tr>
             </thead>
             <tbody>{showData?.map(MakeRow)}</tbody>
@@ -196,7 +150,24 @@ const Dashboard = () => {
                     onChange={(e) => setPhoneNum(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleSubmit(
+                      {
+                        firstName,
+                        lastName,
+                        email,
+                        course_id: course,
+                        city,
+                        phoneNumber: phoneNum,
+                      },
+                      setModalIsOpen,
+                    )
+                  }}
+                >
                   Dodaj
                 </button>
               </form>
