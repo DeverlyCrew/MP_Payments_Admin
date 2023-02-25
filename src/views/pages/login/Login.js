@@ -14,7 +14,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 import { Navigate } from 'react-router-dom'
 
 const Login = () => {
@@ -25,7 +25,7 @@ const Login = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    axios
+    httpClient
       .post(`${process.env.REACT_APP_URL}/admin-login`, {
         email,
         password,

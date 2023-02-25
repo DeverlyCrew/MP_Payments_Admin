@@ -1,18 +1,14 @@
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 import addData from './addData'
 
 const getUsers = (setData, setShowData) => {
-  axios
+  httpClient
     .get(`${process.env.REACT_APP_URL}/get-users`)
     .then((res) => {
       addData(res.data.data, setData, setShowData)
     })
     .catch((err) => {
       console.log(err)
-      if (err.response.status === 401) {
-        localStorage.clear()
-        window.location.href = '/#/login'
-      }
     })
 }
 

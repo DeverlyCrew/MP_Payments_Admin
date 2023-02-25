@@ -1,7 +1,7 @@
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 
 const handleOpenModal = (setCourses, setModalIsOpen) => {
-  axios
+  httpClient
     .get(`${process.env.REACT_APP_URL}/get-courses`)
     .then((res) => {
       setCourses(res.data.data)

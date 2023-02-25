@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 import './Admins.css'
 import { CModal } from '@coreui/react'
 
@@ -13,7 +13,7 @@ const Admins = () => {
 
   const addAdmin = (e) => {
     e.preventDefault()
-    axios
+    httpClient
       .post(`${process.env.REACT_APP_URL}/add-admin`, {
         firstName,
         lastName,
@@ -28,7 +28,7 @@ const Admins = () => {
       })
   }
   const deleteAdmin = (id) => {
-    axios
+    httpClient
       .delete(`${process.env.REACT_APP_URL}/delete-admin/${id}`)
       .then((response) => {
         window.location.reload()
@@ -39,7 +39,7 @@ const Admins = () => {
   }
 
   useEffect(() => {
-    axios
+    httpClient
       .get(`${process.env.REACT_APP_URL}/get-admins`)
       .then((response) => {
         setAdmins(response.data)
@@ -140,7 +140,7 @@ const Admins = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary mb-3 mt-3 w-100">
               Dodaj
             </button>
           </form>
