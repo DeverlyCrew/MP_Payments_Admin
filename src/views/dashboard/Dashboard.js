@@ -55,7 +55,7 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="dashboard_body">
-          <table className="table">
+          <table className="table table-hover">
             <thead>
               <tr>
                 <th scope="col">Ime</th>

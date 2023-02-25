@@ -78,9 +78,9 @@ const Kursevi = () => {
               {data?.map((kurs) => (
                 <tr key={kurs._id}>
                   <td>{kurs.name}</td>
-                  <td>
+                  <td className="text-end">
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-danger text-white pr-1 pl-1 pt-0 pb-0"
                       onClick={() => {
                         setModalIsOpen(true)
                         setModalData('delete')
