@@ -207,7 +207,7 @@ const User = () => {
                     <td>{payment.period[1].split('T')[0]}</td>
                     <td>
                       <button
-                        className="btn btn-danger"
+                        className="btn btn-danger text-white pr-1 pl-1 pt-0 pb-0"
                         onClick={() => {
                           setModalIsOpen(true)
                           setModalContent('delete-payment')

@@ -75,7 +75,10 @@ const Admins = () => {
                   <td className="table_item">{admin.lastName}</td>
                   <td className="table_item">{admin.email}</td>
                   <td className="td_button">
-                    <button className="btn btn-danger" onClick={() => deleteAdmin(admin._id)}>
+                    <button
+                      className="btn btn-danger text-white pr-1 pl-1 pt-0 pb-0"
+                      onClick={() => deleteAdmin(admin._id)}
+                    >
                       Izbriši
                     </button>
                   </td>
