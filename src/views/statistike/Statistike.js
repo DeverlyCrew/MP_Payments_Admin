@@ -7,7 +7,7 @@ const Statistike = () => {
 
   useEffect(() => {
     httpClient
-      .get(`http://localhost:8002/statistics`)
+      .get(`${process.env.REACT_APP_URL}/statistics`)
       .then((res) => {
         setData(res.data)
       })
