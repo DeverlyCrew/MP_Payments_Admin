@@ -23,7 +23,6 @@ export const interceptor = () => {
   )
   httpClient.interceptors.response.use(
     (response) => {
-      console.log(response)
       return response
     },
     (error) => {
