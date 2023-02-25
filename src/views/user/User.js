@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 import { useLocation } from 'react-router-dom'
 import './User.css'
 import DatePicker from 'react-datepicker'
@@ -26,10 +26,11 @@ const User = () => {
     phoneNumber: '',
   })
   const [courses, setCourses] = useState([])
+  const [paymentDate, setPaymentDate] = useState()
 
   const handleDelete = (e) => {
     e.preventDefault()
-    axios
+    httpClient
       .delete(`${process.env.REACT_APP_URL}/delete-user/${id}`)
       .then((res) => {
         window.location.href = '/#/polaznici'
@@ -44,7 +45,7 @@ const User = () => {
   }
 
   const onOpenEditModal = () => {
-    axios.get(`${process.env.REACT_APP_URL}/get-courses`).then((res) => {
+    httpClient.get(`${process.env.REACT_APP_URL}/get-courses`).then((res) => {
       setCourses(res.data.data)
       setModalIsOpen(true)
     })
@@ -52,7 +53,7 @@ const User = () => {
 
   const handleEditSubmit = (e) => {
     e.preventDefault()
-    axios
+    httpClient
       .put(`${process.env.REACT_APP_URL}/edit-user`, {
         id,
         firstName: editData.firstName,
@@ -78,7 +79,7 @@ const User = () => {
   }
 
   useEffect(() => {
-    axios
+    httpClient
       .post(`${process.env.REACT_APP_URL}/get-user`, {
         user_id: id,
       })
@@ -105,12 +106,24 @@ const User = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    axios
+    httpClient
       .post(`${process.env.REACT_APP_URL}/add-payment`, {
         user_id: id,
         amount,
         period: [fromDate, toDate],
       })
+      .then((res) => {
+        setModalIsOpen(false)
+        window.location.reload()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const handleDeletePayment = () => {
+    httpClient
+      .delete(`${process.env.REACT_APP_URL}/delete-payment/${id}/${paymentDate}`)
       .then((res) => {
         setModalIsOpen(false)
         window.location.reload()
@@ -138,7 +151,7 @@ const User = () => {
               Uredi
             </button>
             <button
-              className="btn btn-info"
+              className="btn btn-info text-white"
               onClick={() => {
                 setModalIsOpen(true)
                 setModalContent('add-payment')
@@ -147,7 +160,7 @@ const User = () => {
               Dodaj plaćanje
             </button>
             <button
-              className="btn btn-danger"
+              className="btn btn-danger text-white"
               onClick={() => {
                 setModalIsOpen(true)
                 setModalContent('delete')
@@ -183,6 +196,7 @@ const User = () => {
                   <th scope="col">Iznos</th>
                   <th scope="col">Od:</th>
                   <th scope="col">Do:</th>
+                  <th scope="col">Akcija</th>
                 </tr>
               </thead>
               <tbody>
@@ -191,6 +205,18 @@ const User = () => {
                     <td>{payment.amount}</td>
                     <td>{payment.period[0].split('T')[0]}</td>
                     <td>{payment.period[1].split('T')[0]}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                          setModalIsOpen(true)
+                          setModalContent('delete-payment')
+                          setPaymentDate(payment.date)
+                        }}
+                      >
+                        Obriši
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -345,6 +371,31 @@ const User = () => {
                 </div>
                 <div className="modal_body_item">
                   <button className="btn btn-primary" onClick={handleDelete}>
+                    Obriši
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : modalContent === 'delete-payment' ? (
+            <>
+              <div className="modal_header">
+                <h1>Obriši</h1>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    setModalIsOpen(false)
+                    setModalContent('')
+                  }}
+                >
+                  X
+                </button>
+              </div>
+              <div className="modal_body">
+                <div className="modal_body_item">
+                  <h3>Da li ste sigurni da želite da obrišete plaćanje?</h3>
+                </div>
+                <div className="modal_body_item">
+                  <button className="btn btn-primary" onClick={handleDeletePayment}>
                     Obriši
                   </button>
                 </div>

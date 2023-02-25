@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Kursevi.css'
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 import { CModal } from '@coreui/react'
 
 const Kursevi = () => {
@@ -12,7 +12,7 @@ const Kursevi = () => {
 
   const handleAddCourse = (e) => {
     e.preventDefault()
-    axios
+    httpClient
       .post(`${process.env.REACT_APP_URL}/add-course`, {
         name: courseName,
       })
@@ -25,7 +25,7 @@ const Kursevi = () => {
       })
   }
   const handleDelete = (id) => {
-    axios
+    httpClient
       .delete(`${process.env.REACT_APP_URL}/delete-course/${id}`)
       .then((res) => {
         setModalIsOpen(false)
@@ -38,7 +38,7 @@ const Kursevi = () => {
   }
 
   useEffect(() => {
-    axios
+    httpClient
       .get(`${process.env.REACT_APP_URL}/get-courses`)
       .then((res) => {
         setData(res.data.data)
@@ -96,7 +96,7 @@ const Kursevi = () => {
           </table>
         </div>
       </div>
-      <CModal visible={modalIsOpen} size="lg">
+      <CModal visible={modalIsOpen}>
         <div className="modal_container">
           {modalData === 'add' ? (
             <>
@@ -118,7 +118,11 @@ const Kursevi = () => {
                       onChange={(e) => setCourseName(e.target.value)}
                     />
                   </div>
-                  <button type="submit" className="btn btn-primary" onClick={handleAddCourse}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary mb-3 mt-3 w-100"
+                    onClick={handleAddCourse}
+                  >
                     Dodaj kurs
                   </button>
                 </form>
@@ -134,11 +138,11 @@ const Kursevi = () => {
               </div>
               <div className="modal_body">
                 <div className="modal_body_item">
-                  <h3>Da li ste sigurni da želite da obrišete korisnika?</h3>
+                  <h3>Da li ste sigurni da želite da obrišete kurs?</h3>
                 </div>
                 <div className="modal_body_item">
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary mb-2 w-100"
                     onClick={() => {
                       handleDelete(courseId)
                     }}

@@ -1,7 +1,7 @@
-import axios from 'axios'
+import { httpClient } from 'src/components/interceptor'
 
 const handleSubmit = (userObj, setModalIsOpen) => {
-  axios
+  httpClient
     .post(`${process.env.REACT_APP_URL}/register-user`, userObj)
     .then((res) => {
       setModalIsOpen(false)
