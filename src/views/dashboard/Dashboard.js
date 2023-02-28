@@ -70,7 +70,7 @@ const Dashboard = () => {
             <tbody>{showData?.map(MakeRow)}</tbody>
           </table>
         </div>
-        <CModal visible={modalIsOpen} size="lg">
+        <CModal visible={modalIsOpen}>
           <div className="modal_container">
             <div className="modal_header">
               <h1>Dodaj polaznika</h1>
@@ -152,7 +152,7 @@ const Dashboard = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-primary w-100 mt-3 mb-3"
                   onClick={(e) => {
                     e.preventDefault()
                     handleSubmit(
